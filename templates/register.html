@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block page_title %}Create Your Account{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-user-plus me-2"></i>Register</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('register') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.username.label(class="form-label") }}
+                        {% if form.username.errors %}
+                            {{ form.username(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.username.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.username(class="form-control") }}
+                        {% endif %}
+                        <div class="form-text">Choose a unique username for logging in.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.email.label(class="form-label") }}
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control") }}
+                        {% endif %}
+                        <div class="form-text">We'll never share your email with anyone else.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.password.label(class="form-label") }}
+                        {% if form.password.errors %}
+                            <div class="input-group has-validation">
+                                {{ form.password(class="form-control is-invalid") }}
+                                <button class="btn btn-outline-secondary password-toggle" type="button" data-target="#password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="input-group">
+                                {{ form.password(class="form-control") }}
+                                <button class="btn btn-outline-secondary password-toggle" type="button" data-target="#password">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Password must be at least 8 characters long.</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.password2.label(class="form-label") }}
+                        {% if form.password2.errors %}
+                            <div class="input-group has-validation">
+                                {{ form.password2(class="form-control is-invalid") }}
+                                <button class="btn btn-outline-secondary password-toggle" type="button" data-target="#password2">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <div class="invalid-feedback">
+                                    {% for error in form.password2.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="input-group">
+                                {{ form.password2(class="form-control") }}
+                                <button class="btn btn-outline-secondary password-toggle" type="button" data-target="#password2">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        {% endif %}
+                        <div class="form-text">Please confirm your password.</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <p class="mb-0">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h4 class="card-title mb-3">Why Join HealthTrack?</h4>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-pills text-primary me-3 mt-1" style="font-size: 1.2rem;"></i>
+                            <div>
+                                <h5 class="mb-1 h6">Medicine Tracking</h5>
+                                <p class="small text-muted mb-0">Never miss a dose with smart reminders</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-utensils text-success me-3 mt-1" style="font-size: 1.2rem;"></i>
+                            <div>
+                                <h5 class="mb-1 h6">Diet Management</h5>
+                                <p class="small text-muted mb-0">Track nutrition and eating habits</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start">
+                            <i class="fas fa-calendar-alt text-warning me-3 mt-1" style="font-size: 1.2rem;"></i>
+                            <div>
+                                <h5 class="mb-1 h6">Appointment Manager</h5>
+                                <p class="small text-muted mb-0">Keep all health appointments organized</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Password toggle functionality is handled in app.js
+    });
+</script>
+{% endblock %}

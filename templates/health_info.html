@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Health Information{% endblock %}
+
+{% block page_title %}Health Articles & Resources{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <!-- Search & Filters -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="articleSearch" placeholder="Search articles...">
+                            <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <select class="form-select" id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="Heart Health">Heart Health</option>
+                            <option value="Nutrition">Nutrition</option>
+                            <option value="Diabetes">Diabetes</option>
+                            <option value="Fitness">Fitness</option>
+                            <option value="Medication Management">Medication Management</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Featured Article -->
+        <div class="card mb-4 bg-primary bg-opacity-10">
+            <div class="card-body p-4">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="mb-3">The Importance of Regular Health Check-ups</h3>
+                        <p class="lead">Regular health examinations can identify problems before they start or when chances for treatment are better.</p>
+                        <p>Regardless of your age, gender, or current health status, routine check-ups are essential for maintaining good health and preventing future complications.</p>
+                        <a href="#" class="btn btn-primary mt-2">Read More</a>
+                    </div>
+                    <div class="col-md-4 text-center d-flex align-items-center justify-content-center">
+                        <div>
+                            <i class="fas fa-heartbeat text-primary" style="font-size: 6rem;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Articles Grid -->
+<div class="row g-4" id="articlesContainer">
+    {% for article in articles %}
+    <div class="col-md-6 col-lg-4 article-card" data-category="{{ article.category }}">
+        <div class="card h-100">
+            <div class="card-header">
+                <span class="badge bg-secondary mb-2">{{ article.category }}</span>
+                <h4 class="card-title">{{ article.title }}</h4>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ article.summary }}</p>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">By {{ article.author }}</small>
+                    <small class="text-muted">{{ article.date }}</small>
+                </div>
+                <div class="d-grid mt-2">
+                    <a href="{{ url_for('article_detail', article_id=article.id) }}" class="btn btn-outline-primary">Read Article</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Health Resources Section -->
+<div class="row mt-5">
+    <div class="col-12">
+        <h2 class="mb-4 border-bottom pb-2">Recommended Health Resources</h2>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title"><i class="fas fa-heartbeat text-danger me-2"></i>Heart Health</h4>
+                <p class="card-text">Resources for understanding heart disease, prevention tips, and healthy lifestyle changes.</p>
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><a href="https://www.heart.org/" target="_blank" class="text-decoration-none">American Heart Association</a></li>
+                    <li class="list-group-item"><a href="https://www.nhlbi.nih.gov/" target="_blank" class="text-decoration-none">National Heart, Lung, and Blood Institute</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title"><i class="fas fa-apple-alt text-success me-2"></i>Nutrition</h4>
+                <p class="card-text">Information on balanced diets, nutrition plans, and dietary guidelines for various health conditions.</p>
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><a href="https://www.nutrition.gov/" target="_blank" class="text-decoration-none">Nutrition.gov</a></li>
+                    <li class="list-group-item"><a href="https://www.eatright.org/" target="_blank" class="text-decoration-none">Academy of Nutrition and Dietetics</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h4 class="card-title"><i class="fas fa-pills text-warning me-2"></i>Medication Safety</h4>
+                <p class="card-text">Learn about safe medication practices, potential drug interactions, and proper storage.</p>
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><a href="https://www.fda.gov/drugs/drug-safety-and-availability" target="_blank" class="text-decoration-none">FDA Drug Safety</a></li>
+                    <li class="list-group-item"><a href="https://medlineplus.gov/druginformation.html" target="_blank" class="text-decoration-none">MedlinePlus Drug Information</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Article search functionality
+    const searchInput = document.getElementById('articleSearch');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const articlesContainer = document.getElementById('articlesContainer');
+    const articleCards = document.querySelectorAll('.article-card');
+    
+    function filterArticles() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const categoryTerm = categoryFilter.value;
+        
+        articleCards.forEach(card => {
+            const title = card.querySelector('.card-title').textContent.toLowerCase();
+            const summary = card.querySelector('.card-text').textContent.toLowerCase();
+            const category = card.dataset.category;
+            
+            const matchesSearch = title.includes(searchTerm) || summary.includes(searchTerm);
+            const matchesCategory = !categoryTerm || category === categoryTerm;
+            
+            if (matchesSearch && matchesCategory) {
+                card.style.display = '';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    
+    searchInput.addEventListener('keyup', filterArticles);
+    categoryFilter.addEventListener('change', filterArticles);
+    document.getElementById('searchButton').addEventListener('click', filterArticles);
+});
+</script>
+{% endblock %}

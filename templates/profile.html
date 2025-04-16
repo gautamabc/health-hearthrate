@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Your Profile{% endblock %}
+
+{% block page_title %}Your Health Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- User Information -->
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-user-circle me-2"></i>Basic Information</h3>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="display-1 mb-2">
+                        <i class="fas fa-user-circle text-muted"></i>
+                    </div>
+                    <h4>{{ current_user.username }}</h4>
+                    <p class="text-muted">{{ current_user.email }}</p>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Name:</span>
+                    <span>{{ current_user.first_name or 'Not set' }} {{ current_user.last_name or '' }}</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Date of Birth:</span>
+                    <span>{{ current_user.date_of_birth.strftime('%b %d, %Y') if current_user.date_of_birth else 'Not set' }}</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Gender:</span>
+                    <span>{{ current_user.gender or 'Not set' }}</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Member Since:</span>
+                    <span>{{ current_user.created_at.strftime('%b %d, %Y') }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit Profile Form -->
+    <div class="col-md-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Your Profile</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('profile') }}">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="row profile-section">
+                        <h4 class="col-12 mb-3 border-bottom pb-2">Personal Information</h4>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.first_name.label(class="form-label") }}
+                            {{ form.first_name(class="form-control") }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.last_name.label(class="form-label") }}
+                            {{ form.last_name(class="form-control") }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.date_of_birth.label(class="form-label") }}
+                            {{ form.date_of_birth(class="form-control", type="date") }}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.gender.label(class="form-label") }}
+                            {{ form.gender(class="form-select") }}
+                        </div>
+                    </div>
+                    
+                    <div class="row profile-section">
+                        <h4 class="col-12 mb-3 border-bottom pb-2">Physical Information</h4>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.height.label(class="form-label") }}
+                            <div class="input-group">
+                                {{ form.height(class="form-control") }}
+                                <span class="input-group-text">cm</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.weight.label(class="form-label") }}
+                            <div class="input-group">
+                                {{ form.weight(class="form-control") }}
+                                <span class="input-group-text">kg</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            {{ form.blood_type.label(class="form-label") }}
+                            {{ form.blood_type(class="form-select") }}
+                        </div>
+                    </div>
+                    
+                    <div class="row profile-section">
+                        <h4 class="col-12 mb-3 border-bottom pb-2">Medical Information</h4>
+                        
+                        <div class="col-md-12 mb-3">
+                            {{ form.allergies.label(class="form-label") }}
+                            {{ form.allergies(class="form-control", rows=3, placeholder="List any allergies you have (e.g., penicillin, peanuts, etc.)") }}
+                        </div>
+                        
+                        <div class="col-md-12 mb-3">
+                            {{ form.medical_conditions.label(class="form-label") }}
+                            {{ form.medical_conditions(class="form-control", rows=3, placeholder="List any medical conditions you have (e.g., diabetes, asthma, etc.)") }}
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Health Stats -->
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Health Overview</h3>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <!-- BMI Card -->
+                    <div class="col-md-4">
+                        <div class="card h-100 bg-light bg-opacity-10">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Body Mass Index (BMI)</h5>
+                                {% if current_user.height and current_user.weight %}
+                                    {% set bmi = (current_user.weight / ((current_user.height / 100) ** 2)) | round(1) %}
+                                    <p class="display-4 mb-0">{{ bmi }}</p>
+                                    <p class="text-muted">
+                                        {% if bmi < 18.5 %}
+                                            Underweight
+                                        {% elif bmi < 25 %}
+                                            Normal
+                                        {% elif bmi < 30 %}
+                                            Overweight
+                                        {% else %}
+                                            Obese
+                                        {% endif %}
+                                    </p>
+                                {% else %}
+                                    <p class="text-muted">Add your height and weight to see your BMI</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Medications Card -->
+                    <div class="col-md-4">
+                        <div class="card h-100 bg-light bg-opacity-10">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Active Medications</h5>
+                                {% if current_user.medications %}
+                                    <p class="display-4 mb-0">{{ current_user.medications | length }}</p>
+                                    <p class="mb-0"><a href="{{ url_for('medications') }}" class="text-decoration-none">View all medications</a></p>
+                                {% else %}
+                                    <p class="text-muted">No medications tracked yet</p>
+                                    <a href="{{ url_for('medications') }}" class="btn btn-sm btn-outline-primary">Add medication</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Appointments Card -->
+                    <div class="col-md-4">
+                        <div class="card h-100 bg-light bg-opacity-10">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Upcoming Appointments</h5>
+                                {% if current_user.appointments %}
+                                    {% set upcoming = 0 %}
+                                    {% for appt in current_user.appointments %}
+                                        {% if appt.date >= today %}
+                                            {% set upcoming = upcoming + 1 %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    <p class="display-4 mb-0">{{ upcoming }}</p>
+                                    <p class="mb-0"><a href="{{ url_for('calendar') }}" class="text-decoration-none">View calendar</a></p>
+                                {% else %}
+                                    <p class="text-muted">No appointments scheduled</p>
+                                    <a href="{{ url_for('calendar') }}" class="btn btn-sm btn-outline-primary">Schedule appointment</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

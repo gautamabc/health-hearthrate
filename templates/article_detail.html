@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block page_title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">
+                        <li class="breadcrumb-item"><a href="{{ url_for('health_info') }}">Health Articles</a></li>
+                        <li class="breadcrumb-item"><a href="{{ url_for('health_info') }}?category={{ article.category }}">{{ article.category }}</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ article.title }}</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="card-body p-lg-5">
+                <div class="mb-4">
+                    <span class="badge bg-secondary mb-2">{{ article.category }}</span>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">By {{ article.author }}</span>
+                        <span class="text-muted">{{ article.date }}</span>
+                    </div>
+                </div>
+                
+                <div class="article-content">
+                    {{ article.content|safe }}
+                </div>
+                
+                <div class="d-flex justify-content-between mt-5 pt-4 border-top">
+                    <button class="btn btn-outline-secondary" onclick="window.history.back()">
+                        <i class="fas fa-arrow-left me-1"></i> Back to Articles
+                    </button>
+                    
+                    <div>
+                        <button class="btn btn-outline-primary me-2" onclick="window.print()">
+                            <i class="fas fa-print me-1"></i> Print
+                        </button>
+                        <button class="btn btn-outline-info" id="shareArticle">
+                            <i class="fas fa-share-alt me-1"></i> Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Articles -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-book-medical me-2"></i>Related Articles</h3>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    {% for related_article in articles %}
+                        {% if related_article.category == article.category and related_article.id != article.id %}
+                            <div class="col-md-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ related_article.title }}</h5>
+                                        <p class="card-text small">{{ related_article.summary|truncate(100) }}</p>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="{{ url_for('article_detail', article_id=related_article.id) }}" class="btn btn-sm btn-outline-primary">Read Article</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Share article functionality
+    const shareButton = document.getElementById('shareArticle');
+    if (shareButton) {
+        shareButton.addEventListener('click', function() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ article.title }}',
+                    text: '{{ article.summary }}',
+                    url: window.location.href,
+                })
+                .then(() => console.log('Successful share'))
+                .catch((error) => console.log('Error sharing', error));
+            } else {
+                // Fallback for browsers that don't support the Web Share API
+                const dummy = document.createElement('input');
+                document.body.appendChild(dummy);
+                dummy.value = window.location.href;
+                dummy.select();
+                document.execCommand('copy');
+                document.body.removeChild(dummy);
+                
+                alert('URL copied to clipboard!');
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

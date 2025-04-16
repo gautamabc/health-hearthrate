@@ -1,0 +1,183 @@
+{
+  "headache": {
+    "possible_conditions": ["Tension headache", "Migraine", "Dehydration", "Sinusitis"],
+    "recommendations": [
+      "Rest in a quiet, dark room",
+      "Apply a cold or warm compress to your head",
+      "Stay hydrated",
+      "Over-the-counter pain relievers like acetaminophen or ibuprofen may help"
+    ],
+    "when_to_see_doctor": [
+      "Severe or sudden headache",
+      "Headache with fever, stiff neck, confusion, seizures, double vision, weakness, numbness or difficulty speaking",
+      "Headache after a head injury",
+      "Chronic or recurring headaches"
+    ]
+  },
+  "fever": {
+    "possible_conditions": ["Viral infection", "Bacterial infection", "Inflammatory conditions"],
+    "recommendations": [
+      "Rest and stay hydrated",
+      "Take acetaminophen or ibuprofen to reduce fever",
+      "Use a light blanket if you have chills"
+    ],
+    "when_to_see_doctor": [
+      "Temperature above 103°F (39.4°C)",
+      "Fever lasting more than three days",
+      "Fever with severe headache, stiff neck, confusion or difficulty breathing",
+      "Fever in infants and young children"
+    ]
+  },
+  "cough": {
+    "possible_conditions": ["Common cold", "Flu", "Allergies", "Asthma", "Bronchitis"],
+    "recommendations": [
+      "Stay hydrated",
+      "Use a humidifier or take a steamy shower",
+      "Honey (for adults and children over 1 year)",
+      "Over-the-counter cough suppressants for dry coughs",
+      "Over-the-counter expectorants for productive coughs"
+    ],
+    "when_to_see_doctor": [
+      "Cough lasting more than three weeks",
+      "Coughing up blood or yellow-green phlegm",
+      "Cough with fever, chest pain, or difficulty breathing",
+      "Cough that disturbs sleep or daily activities"
+    ]
+  },
+  "sore throat": {
+    "possible_conditions": ["Common cold", "Strep throat", "Tonsillitis", "Allergies"],
+    "recommendations": [
+      "Gargle with warm salt water",
+      "Drink warm liquids like tea with honey",
+      "Use throat lozenges or sprays",
+      "Take acetaminophen or ibuprofen for pain"
+    ],
+    "when_to_see_doctor": [
+      "Severe pain when swallowing",
+      "Sore throat with fever over 101°F (38.3°C)",
+      "Sore throat lasting more than a week",
+      "Rash, joint pain, or difficulty breathing"
+    ]
+  },
+  "stomach pain": {
+    "possible_conditions": ["Indigestion", "Gas", "Food poisoning", "Gastritis", "Appendicitis"],
+    "recommendations": [
+      "Avoid solid foods for a few hours",
+      "Sip clear liquids like water or broth",
+      "Avoid dairy, caffeine, alcohol, and fatty foods",
+      "Use a heating pad on your abdomen"
+    ],
+    "when_to_see_doctor": [
+      "Severe or persistent pain",
+      "Pain accompanied by fever",
+      "Inability to keep food down for more than 2 days",
+      "Bloody stools or vomit",
+      "Pain during pregnancy"
+    ]
+  },
+  "nausea": {
+    "possible_conditions": ["Food poisoning", "Gastroenteritis", "Migraine", "Medication side effect"],
+    "recommendations": [
+      "Eat bland foods like crackers or toast",
+      "Drink clear liquids in small sips",
+      "Avoid strong odors and foods",
+      "Ginger tea or ginger supplements"
+    ],
+    "when_to_see_doctor": [
+      "Nausea lasting more than 2 days",
+      "Inability to keep any food or liquid down",
+      "Signs of dehydration (dark urine, dizziness)",
+      "Severe abdominal pain"
+    ]
+  },
+  "fatigue": {
+    "possible_conditions": ["Lack of sleep", "Stress", "Anemia", "Depression", "Hypothyroidism"],
+    "recommendations": [
+      "Ensure adequate sleep (7-9 hours)",
+      "Stay hydrated and eat balanced meals",
+      "Regular physical activity",
+      "Stress management techniques"
+    ],
+    "when_to_see_doctor": [
+      "Persistent fatigue despite adequate rest",
+      "Fatigue with unexplained weight loss",
+      "Fatigue with shortness of breath or chest pain",
+      "Extreme fatigue that interferes with daily activities"
+    ]
+  },
+  "dizziness": {
+    "possible_conditions": ["Dehydration", "Low blood sugar", "Inner ear issues", "Low blood pressure"],
+    "recommendations": [
+      "Sit or lie down immediately",
+      "Stay hydrated",
+      "Eat regular meals",
+      "Avoid sudden movements"
+    ],
+    "when_to_see_doctor": [
+      "Persistent or severe dizziness",
+      "Dizziness with headache, hearing loss, or ringing in ears",
+      "Dizziness with chest pain or irregular heartbeat",
+      "Dizziness after a head injury"
+    ]
+  },
+  "rash": {
+    "possible_conditions": ["Allergic reaction", "Eczema", "Contact dermatitis", "Fungal infection"],
+    "recommendations": [
+      "Avoid scratching the affected area",
+      "Apply cool compresses",
+      "Use mild, fragrance-free soaps and moisturizers",
+      "Try over-the-counter hydrocortisone cream for itching"
+    ],
+    "when_to_see_doctor": [
+      "Rash that is widespread or rapidly spreading",
+      "Rash accompanied by fever",
+      "Rash that is painful or appears infected",
+      "Rash that blisters or has open sores"
+    ]
+  },
+  "joint pain": {
+    "possible_conditions": ["Arthritis", "Injury", "Bursitis", "Gout"],
+    "recommendations": [
+      "Rest the affected joint",
+      "Apply ice to reduce inflammation",
+      "Use over-the-counter pain relievers like ibuprofen or acetaminophen",
+      "Try gentle stretching and strengthening exercises"
+    ],
+    "when_to_see_doctor": [
+      "Severe pain or swelling",
+      "Joint appears deformed",
+      "Joint pain with fever",
+      "Inability to use the joint"
+    ]
+  },
+  "back pain": {
+    "possible_conditions": ["Muscle strain", "Herniated disc", "Arthritis", "Sciatica"],
+    "recommendations": [
+      "Apply ice for the first 48-72 hours, then switch to heat",
+      "Maintain normal activity as much as possible",
+      "Use over-the-counter pain relievers",
+      "Practice good posture"
+    ],
+    "when_to_see_doctor": [
+      "Pain following an injury",
+      "Severe pain that doesn't improve with rest",
+      "Pain radiating down legs, especially below the knee",
+      "Back pain with numbness, tingling, or weakness in legs"
+    ]
+  },
+  "shortness of breath": {
+    "possible_conditions": ["Asthma", "Anxiety", "COPD", "Heart failure", "Pneumonia"],
+    "recommendations": [
+      "Sit upright to help breathing",
+      "Try breathing through pursed lips",
+      "Use prescribed inhalers if you have asthma or COPD",
+      "Practice relaxation techniques if anxiety-related"
+    ],
+    "when_to_see_doctor": [
+      "Sudden or severe shortness of breath",
+      "Shortness of breath at rest",
+      "Shortness of breath with chest pain, dizziness, or fainting",
+      "Blue tinge to lips, skin, or fingernails"
+    ]
+  }
+}

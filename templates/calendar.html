@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Health Calendar{% endblock %}
+
+{% block page_title %}Your Health Calendar{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Calendar View -->
+    <div class="col-lg-8 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="far fa-calendar-alt me-2"></i>Calendar</h3>
+            </div>
+            <div class="card-body">
+                <div id="calendar" class="calendar-container" data-events='{{ events }}'></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Appointment Form -->
+    <div class="col-lg-4 mb-4">
+        <div class="card sticky-top" style="top: 70px;">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add Appointment</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('calendar') }}" id="appointmentForm">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {% if form.title.errors %}
+                            {{ form.title(class="form-control is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.title(class="form-control", placeholder="e.g., Annual Checkup") }}
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.doctor.label(class="form-label") }}
+                        {{ form.doctor(class="form-control", placeholder="e.g., Dr. Smith") }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.location.label(class="form-label") }}
+                        {{ form.location(class="form-control", placeholder="e.g., City Hospital") }}
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-6">
+                            {{ form.date.label(class="form-label") }}
+                            {% if form.date.errors %}
+                                {{ form.date(class="form-control is-invalid", type="date") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.date.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.date(class="form-control", type="date") }}
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            {{ form.time.label(class="form-label") }}
+                            {% if form.time.errors %}
+                                {{ form.time(class="form-control is-invalid", type="time") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.time.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.time(class="form-control", type="time") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.notes.label(class="form-label") }}
+                        {{ form.notes(class="form-control", rows=3, placeholder="Any special instructions or items to bring") }}
+                    </div>
+                    
+                    <div class="mb-4 form-check">
+                        {{ form.remind(class="form-check-input") }}
+                        {{ form.remind.label(class="form-check-label") }}
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Calendar Legend -->
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-info-circle me-2"></i>Calendar Legend</h3>
+            </div>
+            <div class="card-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="me-2" style="width: 20px; height: 20px; background-color: #3788d8; border-radius: 4px;"></div>
+                            <span>Medications</span>
+                        </div>
+                        <p class="small text-muted">Shows your medication schedule based on start and end dates. Click for more details.</p>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="me-2" style="width: 20px; height: 20px; background-color: #198754; border-radius: 4px;"></div>
+                            <span>Appointments</span>
+                        </div>
+                        <p class="small text-muted">Shows your scheduled appointments. Click to view details or delete appointments.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Event Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Event Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Event details will be loaded here -->
+            </div>
+            <div class="modal-footer">
+                <!-- Dynamic buttons will be added here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/calendar.js') }}"></script>
+{% endblock %}

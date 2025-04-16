@@ -1,0 +1,316 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block page_title %}{% if current_user.is_authenticated %}Your Health Dashboard{% else %}Welcome to HealthTrack{% endif %}{% endblock %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+<!-- User Dashboard -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Hello, {{ current_user.first_name or current_user.username }}!</h2>
+                <p class="card-text">Here's your health summary for today:</p>
+                
+                <!-- Quick Stats -->
+                <div class="row g-4 mt-2">
+                    <!-- Medications -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card bg-primary bg-opacity-10 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-pills card-icon text-primary"></i>
+                                <h5 class="card-title">Medications</h5>
+                                <p class="card-text h3">{{ today_medications|length }}</p>
+                                <p class="card-text">due today</p>
+                                <a href="{{ url_for('medications') }}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Appointments -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card bg-success bg-opacity-10 h-100">
+                            <div class="card-body text-center">
+                                <i class="far fa-calendar-check card-icon text-success"></i>
+                                <h5 class="card-title">Appointments</h5>
+                                <p class="card-text h3">{{ today_appointments|length }}</p>
+                                <p class="card-text">scheduled today</p>
+                                <a href="{{ url_for('calendar') }}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Water Intake -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card bg-info bg-opacity-10 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-tint card-icon text-info"></i>
+                                <h5 class="card-title">Water Intake</h5>
+                                <p class="card-text h3">{{ total_water }} <small>ml</small></p>
+                                <div class="progress" style="height: 10px;">
+                                    <div class="progress-bar bg-info" role="progressbar" 
+                                         style="width: {{ ((total_water / 2000 * 100)|round)|int }}%;" 
+                                         aria-valuenow="{{ ((total_water / 2000 * 100)|round)|int }}" 
+                                         aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <p class="card-text mt-2">of 2000ml goal</p>
+                                <a href="{{ url_for('water_tracker') }}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Calories -->
+                    <div class="col-md-3">
+                        <div class="card dashboard-card bg-warning bg-opacity-10 h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-utensils card-icon text-warning"></i>
+                                <h5 class="card-title">Calories</h5>
+                                <p class="card-text h3">{{ total_calories }}</p>
+                                <p class="card-text">calories today</p>
+                                <a href="{{ url_for('diet') }}" class="stretched-link"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Medication Reminders -->
+{% if today_medications %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="mb-0"><i class="fas fa-bell text-warning me-2"></i>Today's Medication Reminders</h3>
+                <a href="{{ url_for('medications') }}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Medication</th>
+                                <th>Dosage</th>
+                                <th>Time</th>
+                                <th>Instructions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for med in today_medications %}
+                            <tr>
+                                <td>{{ med.name }}</td>
+                                <td>{{ med.dosage }}</td>
+                                <td>{{ med.time_of_day }}</td>
+                                <td>{{ med.notes or 'No special instructions' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-bolt text-primary me-2"></i>Quick Actions</h3>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <a href="{{ url_for('medications') }}" class="btn btn-lg btn-outline-primary w-100 py-3">
+                            <i class="fas fa-pills mb-2 d-block" style="font-size: 1.5rem;"></i>
+                            Add Medication
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('calendar') }}" class="btn btn-lg btn-outline-success w-100 py-3">
+                            <i class="fas fa-calendar-plus mb-2 d-block" style="font-size: 1.5rem;"></i>
+                            Schedule Appointment
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('diet') }}" class="btn btn-lg btn-outline-warning w-100 py-3">
+                            <i class="fas fa-utensils mb-2 d-block" style="font-size: 1.5rem;"></i>
+                            Log Meal
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{{ url_for('symptom_checker') }}" class="btn btn-lg btn-outline-info w-100 py-3">
+                            <i class="fas fa-stethoscope mb-2 d-block" style="font-size: 1.5rem;"></i>
+                            Check Symptoms
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Health Tips -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-lightbulb text-warning me-2"></i>Health Tip of the Day</h3>
+            </div>
+            <div class="card-body">
+                <h4>Stay Hydrated</h4>
+                <p>Drinking enough water is essential for many bodily functions. It helps regulate body temperature, keeps joints lubricated, prevents infections, delivers nutrients to cells, and keeps organs functioning properly.</p>
+                <ul>
+                    <li>Aim for 8 glasses (about 2 liters) of water per day</li>
+                    <li>Carry a reusable water bottle with you</li>
+                    <li>Set reminders to drink water throughout the day</li>
+                    <li>Eat water-rich foods like fruits and vegetables</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('health_info') }}" class="btn btn-sm btn-outline-warning">Read More Health Tips</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h3 class="mb-0"><i class="fas fa-book-medical text-danger me-2"></i>Latest Health Articles</h3>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    <a href="{{ url_for('health_info') }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">Understanding Blood Pressure</h5>
+                            <small>Jan 15, 2023</small>
+                        </div>
+                        <p class="mb-1">Learn about the importance of maintaining healthy blood pressure levels.</p>
+                    </a>
+                    <a href="{{ url_for('health_info') }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">The Importance of Staying Hydrated</h5>
+                            <small>Feb 10, 2023</small>
+                        </div>
+                        <p class="mb-1">Discover why water is essential for your body and how to ensure you're getting enough.</p>
+                    </a>
+                    <a href="{{ url_for('health_info') }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">Managing Diabetes Through Diet</h5>
+                            <small>Mar 5, 2023</small>
+                        </div>
+                        <p class="mb-1">Learn how dietary choices affect blood sugar levels and how to manage diabetes through nutrition.</p>
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('health_info') }}" class="btn btn-sm btn-outline-danger">View All Articles</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+<!-- Landing Page for Non-Authenticated Users -->
+<div class="row justify-content-center align-items-center">
+    <div class="col-md-10">
+        <!-- Hero Section -->
+        <div class="card mb-5 bg-primary bg-opacity-10 border-0">
+            <div class="card-body p-5 text-center">
+                <h1 class="display-4 mb-4"><i class="fas fa-heartbeat text-danger me-2"></i>Take Control of Your Health</h1>
+                <p class="lead mb-4">HealthTrack is your personal health companion, helping you manage medications, track diet, monitor symptoms, and stay on top of your well-being.</p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4">Sign Up Now</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg px-4">Log In</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Features Section -->
+        <h2 class="text-center mb-4">Features</h2>
+        <div class="row g-4 mb-5">
+            <!-- Medicine Tracking -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 dashboard-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-pills card-icon text-primary"></i>
+                        <h3 class="card-title h4">Medicine Tracker</h3>
+                        <p class="card-text">Never miss a dose with our medication reminder system. Schedule and track all your medications in one place.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Diet Tracking -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 dashboard-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-utensils card-icon text-success"></i>
+                        <h3 class="card-title h4">Diet Tracker</h3>
+                        <p class="card-text">Monitor your diet, track calories, and maintain a food diary to support your health goals and dietary needs.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Symptom Checker -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 dashboard-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-stethoscope card-icon text-danger"></i>
+                        <h3 class="card-title h4">Symptom Checker</h3>
+                        <p class="card-text">Identify possible causes for your symptoms and get guidance on when to seek professional medical help.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Calendar -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 dashboard-card">
+                    <div class="card-body text-center">
+                        <i class="far fa-calendar-alt card-icon text-warning"></i>
+                        <h3 class="card-title h4">Health Calendar</h3>
+                        <p class="card-text">Keep track of medical appointments, medication schedules, and health-related events all in one view.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Water Tracking -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 dashboard-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-tint card-icon text-info"></i>
+                        <h3 class="card-title h4">Water Intake</h3>
+                        <p class="card-text">Stay hydrated with our water tracking tool. Set goals and monitor your daily water consumption.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Health Info -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0 dashboard-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book-medical card-icon text-secondary"></i>
+                        <h3 class="card-title h4">Health Articles</h3>
+                        <p class="card-text">Access a library of health information, tips, and articles to help you make informed healthcare decisions.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Call to Action -->
+        <div class="card bg-secondary bg-opacity-10 border-0 mb-5">
+            <div class="card-body p-5 text-center">
+                <h2 class="mb-4">Ready to start your health journey?</h2>
+                <p class="lead mb-4">Join thousands of users who are taking control of their health with HealthTrack.</p>
+                <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg px-4 me-md-2">Get Started Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
